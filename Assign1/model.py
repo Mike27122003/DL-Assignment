@@ -1,12 +1,13 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+
 
 class RNN(nn.Module):
     def __init__(
         self,
         input_dim,
         hidden_dim,
+        output_dim,
         layer_dim=1,
         device="cpu",
     ):
@@ -16,7 +17,9 @@ class RNN(nn.Module):
         self.layer_dim = layer_dim
         self.device = device
         self.rnn = nn.RNN(input_dim, hidden_dim, device=self.device)
+        self.pred_head = nn.Linear(hidden_dim, output_dim)
 
     def forward(self, x: torch.Tensor):
-        out = self.rnn(x)
-        return out
+        out, _ = self.rnn(x)
+        pred = self.pred_head(out[:, -1, :])
+        return pred

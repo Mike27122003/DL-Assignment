@@ -19,6 +19,7 @@ MAX_EPOCHS = 100
 WINDOW_SIZE = 20
 BATCH_SIZE = 32
 LEARNING_RATE = 1e-3
+PREDICT_FUTURE = 200
 
 mat = sio.loadmat("Xtrain.mat")
 X_raw = np.array(mat["Xtrain"])
@@ -94,15 +95,48 @@ for epoch in epoch_pbar:
     )
 
 
+# run the model to test
+rnn.eval()
+all_loader = DataLoader(laser_dataset, batch_size=BATCH_SIZE, shuffle=False)
+
+# get predictions for existing dataset
+dataset_predictions = []
+
+with torch.no_grad():
+    for batch_x, _ in all_loader:
+        preds = rnn(batch_x)
+        dataset_predictions.append(preds.numpy())
+
+dataset_predictions = np.concatenate(dataset_predictions, axis=0)
+
+# predict future recursively
+current_window = torch.tensor(X_scaled[-WINDOW_SIZE:]).view(1, WINDOW_SIZE, 1).float()
+future_predictions = []
+
+for _ in range(PREDICT_FUTURE):
+    with torch.no_grad():
+        pred = rnn(current_window)
+        future_predictions.append(pred.item())
+
+        # slide the window
+        new_point = pred.view(1, 1, 1)
+        current_window = torch.cat((current_window[:, 1:, :], new_point), dim=1)
+
+# scale values back
+in_sample_unscaled = scaler.inverse_transform(dataset_predictions.reshape(-1, 1))
+future_unscaled = scaler.inverse_transform(np.array(future_predictions).reshape(-1, 1))
+actual_unscaled = scaler.inverse_transform(X_scaled)
+
 # Convert history to a DataFrame for easy viewing
 history_df = pd.DataFrame(history)
 print("\nFinal Training History Preview:")
 print(history_df.tail())
 
-plt.figure(figsize=(12, 5))
+# plots
+plt.figure(figsize=(15, 10))
 
-# Plot MSE
-plt.subplot(1, 2, 1)
+# MSE plot
+plt.subplot(2, 2, 1)
 plt.plot(history["train_mse"], label="Train MSE")
 plt.plot(history["val_mse"], label="Val MSE")
 plt.title("Model MSE (Loss)")
@@ -110,13 +144,52 @@ plt.xlabel("Epoch")
 plt.ylabel("Loss")
 plt.legend()
 
-# Plot MAE
-plt.subplot(1, 2, 2)
+# MAE plot
+plt.subplot(2, 2, 2)
 plt.plot(history["val_mae"], label="Val MAE", color="orange")
 plt.title("Validation MAE")
 plt.xlabel("Epoch")
-plt.ylabel("Error (Scaled Units)")
+plt.ylabel("Error (Scaled)")
 plt.legend()
+
+# Data plot
+plt.subplot(2, 2, (3, 4))
+
+# Plot actual data
+time_actual = np.arange(len(actual_unscaled))
+plt.plot(time_actual, actual_unscaled, label="Actual Data", color="black", alpha=0.5)
+
+# Plot dataset predictions
+time_in_sample = np.arange(WINDOW_SIZE, WINDOW_SIZE + len(in_sample_unscaled))
+plt.plot(
+    time_in_sample,
+    in_sample_unscaled,
+    label="Dataset predictions",
+    color="blue",
+    linestyle="--",
+    alpha=0.8,
+)
+
+# Plot Future predictions
+time_future = np.arange(len(actual_unscaled), len(actual_unscaled) + PREDICT_FUTURE)
+plt.plot(
+    time_future,
+    future_unscaled,
+    label=f"Future predictions ({PREDICT_FUTURE} steps)",
+    color="red",
+    linewidth=2,
+)
+
+# Vertical line to show where the real data ends
+plt.axvline(
+    x=len(actual_unscaled), color="green", linestyle=":", label="Forecast Start"
+)
+
+plt.title("Plotted data")
+plt.xlabel("Time Steps")
+plt.ylabel("Value")
+plt.legend(loc="upper left")
+plt.grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.show()

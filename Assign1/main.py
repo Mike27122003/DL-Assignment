@@ -5,7 +5,7 @@ import scipy.io as sio
 import torch.nn as nn
 from torch.utils.data import Subset, DataLoader
 import torch.optim as optim
-from model import RNN
+from model import RNN, LSTM
 from tqdm import tqdm
 from sklearn.preprocessing import MinMaxScaler
 from dataset import LaserDataset
@@ -20,18 +20,28 @@ WINDOW_SIZE = 20
 BATCH_SIZE = 32
 LEARNING_RATE = 1e-3
 PREDICT_FUTURE = 200
+USE_LSTM = False
 
 mat = sio.loadmat("Xtrain.mat")
 X_raw = np.array(mat["Xtrain"])
 scaler = MinMaxScaler()
 X_scaled = scaler.fit_transform(X_raw.reshape(-1, 1))
 
-rnn = RNN(
-    input_dim=INPUT_DIM,
-    hidden_dim=HIDDEN_DIM,
-    layer_dim=NUM_LAYERS,
-    output_dim=OUTPUT_DIM,
-)
+if USE_LSTM:
+    model = LSTM(
+        input_dim=INPUT_DIM,
+        hidden_dim=HIDDEN_DIM,
+        layer_dim=NUM_LAYERS,
+        output_dim=OUTPUT_DIM,
+    )
+else:
+    model = RNN(
+        input_dim=INPUT_DIM,
+        hidden_dim=HIDDEN_DIM,
+        layer_dim=NUM_LAYERS,
+        output_dim=OUTPUT_DIM,
+    )
+
 laser_dataset = LaserDataset(X_scaled, WINDOW_SIZE)
 
 train_size = int(0.8 * len(laser_dataset))
@@ -43,7 +53,7 @@ train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, shuffle=True)
 val_loader = DataLoader(val_data, batch_size=BATCH_SIZE, shuffle=False)
 
 criterion = nn.MSELoss()
-optimizer = optim.AdamW(rnn.parameters(), lr=LEARNING_RATE)
+optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE)
 
 history = {"train_mse": [], "val_mse": [], "val_mae": []}
 
@@ -51,25 +61,25 @@ history = {"train_mse": [], "val_mse": [], "val_mae": []}
 epoch_pbar = tqdm(range(MAX_EPOCHS), desc="Training Progress", unit="epoch")
 
 for epoch in epoch_pbar:
-    rnn.train()
+    model.train()
     running_train_mse = 0.0
 
     for batch_x, batch_y in train_loader:
         optimizer.zero_grad()
-        preds = rnn(batch_x)
+        preds = model(batch_x)
         loss = criterion(preds, batch_y)
         loss.backward()
         optimizer.step()
 
         running_train_mse += loss.item()
 
-    rnn.eval()
+    model.eval()
     running_val_mse = 0.0
     running_val_mae = 0.0
 
     with torch.no_grad():
         for batch_x, batch_y in val_loader:
-            val_preds = rnn(batch_x)
+            val_preds = model(batch_x)
 
             v_mse = criterion(val_preds, batch_y)
             v_mae = torch.abs(val_preds - batch_y).mean()
@@ -96,7 +106,7 @@ for epoch in epoch_pbar:
 
 
 # run the model to test
-rnn.eval()
+model.eval()
 all_loader = DataLoader(laser_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
 # get predictions for existing dataset
@@ -104,18 +114,18 @@ dataset_predictions = []
 
 with torch.no_grad():
     for batch_x, _ in all_loader:
-        preds = rnn(batch_x)
+        preds = model(batch_x)
         dataset_predictions.append(preds.numpy())
 
 dataset_predictions = np.concatenate(dataset_predictions, axis=0)
 
-# predict future recursively
+# predict future recursively (take the last WINDOW_SIZE items)
 current_window = torch.tensor(X_scaled[-WINDOW_SIZE:]).view(1, WINDOW_SIZE, 1).float()
 future_predictions = []
 
 for _ in range(PREDICT_FUTURE):
     with torch.no_grad():
-        pred = rnn(current_window)
+        pred = model(current_window)
         future_predictions.append(pred.item())
 
         # slide the window
@@ -192,4 +202,6 @@ plt.legend(loc="upper left")
 plt.grid(True, alpha=0.3)
 
 plt.tight_layout()
+plot_filename = "LSTM" if USE_LSTM else "RNN"
+plt.savefig(f"plots/{plot_filename}.png")
 plt.show()

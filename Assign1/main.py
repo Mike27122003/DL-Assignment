@@ -11,6 +11,7 @@ from sklearn.preprocessing import MinMaxScaler
 from dataset import LaserDataset
 import matplotlib.pyplot as plt
 
+RANDOM_SEED = 42  # for reproducability. Set to None to use full random process
 INPUT_DIM = 1
 HIDDEN_DIM = 32
 OUTPUT_DIM = 1
@@ -26,6 +27,9 @@ mat = sio.loadmat("Xtrain.mat")
 X_raw = np.array(mat["Xtrain"])
 scaler = MinMaxScaler()
 X_scaled = scaler.fit_transform(X_raw.reshape(-1, 1))
+
+if RANDOM_SEED is not None:
+    torch.manual_seed(RANDOM_SEED)
 
 if USE_LSTM:
     model = LSTM(

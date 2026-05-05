@@ -1,0 +1,10 @@
+{
+    "model": "RNN",
+    "hidden_dim": 32,
+    "window_size": 30,
+    "learning_rate": 0.001,
+    "score": 0.0059711,
+    "train_mse": 0.0019391,
+    "val_mse": 0.0001998,
+    "val_mae": 0.0115426
+}

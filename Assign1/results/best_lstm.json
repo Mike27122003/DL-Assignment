@@ -1,0 +1,10 @@
+{
+    "model": "LSTM",
+    "hidden_dim": 64,
+    "window_size": 10,
+    "learning_rate": 0.001,
+    "score": 0.0030493,
+    "train_mse": 0.0011147,
+    "val_mse": 6.87e-05,
+    "val_mae": 0.0059611
+}

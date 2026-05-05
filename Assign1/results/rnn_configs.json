@@ -1,0 +1,162 @@
+[
+    {
+        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 30,
+        "learning_rate": 0.001,
+        "score": 0.0059711,
+        "train_mse": 0.0019391,
+        "val_mse": 0.0001998,
+        "val_mae": 0.0115426
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 20,
+        "learning_rate": 0.001,
+        "score": 0.0065079,
+        "train_mse": 0.0016853,
+        "val_mse": 0.0002462,
+        "val_mae": 0.0125234
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 10,
+        "learning_rate": 0.001,
+        "score": 0.0074428,
+        "train_mse": 0.0023794,
+        "val_mse": 0.0003902,
+        "val_mae": 0.0141053
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 10,
+        "learning_rate": 0.001,
+        "score": 0.0091274,
+        "train_mse": 0.0036947,
+        "val_mse": 0.0005279,
+        "val_mae": 0.017199
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 30,
+        "learning_rate": 0.001,
+        "score": 0.00916,
+        "train_mse": 0.0023121,
+        "val_mse": 0.0004101,
+        "val_mae": 0.0174999
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 20,
+        "learning_rate": 0.001,
+        "score": 0.0099004,
+        "train_mse": 0.0019232,
+        "val_mse": 0.000527,
+        "val_mae": 0.0187467
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 40,
+        "learning_rate": 0.001,
+        "score": 0.0102062,
+        "train_mse": 0.0025646,
+        "val_mse": 0.0005523,
+        "val_mae": 0.0193077
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 40,
+        "learning_rate": 0.001,
+        "score": 0.0107331,
+        "train_mse": 0.0035261,
+        "val_mse": 0.0006167,
+        "val_mae": 0.0202328
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 30,
+        "learning_rate": 0.0001,
+        "score": 0.0188491,
+        "train_mse": 0.007171,
+        "val_mse": 0.0019678,
+        "val_mae": 0.0337627
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 20,
+        "learning_rate": 0.0001,
+        "score": 0.0197655,
+        "train_mse": 0.0076716,
+        "val_mse": 0.0020419,
+        "val_mae": 0.0354473
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 40,
+        "learning_rate": 0.0001,
+        "score": 0.0225481,
+        "train_mse": 0.007625,
+        "val_mse": 0.002768,
+        "val_mae": 0.0395602
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 10,
+        "learning_rate": 0.0001,
+        "score": 0.0248854,
+        "train_mse": 0.0081754,
+        "val_mse": 0.003424,
+        "val_mae": 0.0429228
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 10,
+        "learning_rate": 0.0001,
+        "score": 0.0319909,
+        "train_mse": 0.010051,
+        "val_mse": 0.0048415,
+        "val_mae": 0.0542987
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 30,
+        "learning_rate": 0.0001,
+        "score": 0.0326605,
+        "train_mse": 0.0114913,
+        "val_mse": 0.0048763,
+        "val_mae": 0.0555684
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 20,
+        "learning_rate": 0.0001,
+        "score": 0.0333076,
+        "train_mse": 0.0113079,
+        "val_mse": 0.0054212,
+        "val_mae": 0.0557728
+    },
+    {
+        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 40,
+        "learning_rate": 0.0001,
+        "score": 0.0341385,
+        "train_mse": 0.0108051,
+        "val_mse": 0.0056071,
+        "val_mae": 0.0570628
+    }
+]

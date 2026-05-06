@@ -14,6 +14,7 @@ from sklearn.preprocessing import MinMaxScaler
 from dataset import LaserDataset
 import json
 from plots import plot_forecasts
+from evaluate import evaluate
 
 RANDOM_SEED = 42
 INPUT_DIM = 1
@@ -117,3 +118,14 @@ training_data_lstm = LaserDataset(X_scaled, WINDOW_SIZE_LSTM)
 rnn_in, rnn_future, actual = run_model(model_rnn, training_data_rnn, WINDOW_SIZE_RNN, LEARNING_RATE_RNN)
 lstm_in, lstm_future, _ = run_model(model_lstm, training_data_lstm, WINDOW_SIZE_LSTM, LEARNING_RATE_LSTM) #actual is already retrieved in RNN
 plot_forecasts(actual, rnn_in, rnn_future, lstm_in, lstm_future, WINDOW_SIZE_RNN, WINDOW_SIZE_LSTM, PREDICT_FUTURE)
+evaluate(rnn_future, lstm_future)
+
+# --- TEMPORARY: simulate test data for testing evaluate.py ---
+import scipy.io as sio_test
+import numpy as np
+
+fake_test = X_raw.flatten()[-200:]  # last 200 points as fake test
+sio_test.savemat("Xtrain.mat", {"Xtest": fake_test})
+
+from evaluate import evaluate
+evaluate(rnn_future, lstm_future)

@@ -4,6 +4,7 @@ import scipy.io as sio
 import torch.nn as nn
 from torch.utils.data import Subset, DataLoader
 import torch.optim as optim
+from plots import plot_history
 from model import RNN, LSTM
 from sklearn.preprocessing import MinMaxScaler
 from dataset import LaserDataset
@@ -18,7 +19,7 @@ MAX_EPOCHS = 100
 BATCH_SIZE = 32
 HIDDEN_DIMS = [32, 64] #Tune
 WINDOW_SIZES = [10, 20, 30, 40] #Tune
-LEARNING_RATES = [1e-4, 1e-3] #Tune
+LEARNING_RATES = [1e-3, 1e-4] #Tune
 
 os.makedirs("results", exist_ok=True)
 mat = sio.loadmat("Xtrain.mat")
@@ -26,28 +27,23 @@ X_raw = np.array(mat["Xtrain"])
 scaler = MinMaxScaler()
 X_scaled = scaler.fit_transform(X_raw.reshape(-1, 1))
 
-if RANDOM_SEED is not None:
-    torch.manual_seed(RANDOM_SEED)
-
 resultsRNN = []
 resultsLSTM = []
 
 best_rnn_score = float("inf")
 best_lstm_score = float("inf")
 
-best_rnn_config = None
-best_lstm_config = None
-
-best_rnn_model_state = None
-best_lstm_model_state = None
+best_rnn_history = None
+best_lstm_history = None
 
 #Iterate over every hyperparameter combination
 for MODEL_CLASS in [RNN, LSTM]:
-    for HIDDEN_DIM in HIDDEN_DIMS:
-        for WINDOW_SIZE in WINDOW_SIZES:
+    for WINDOW_SIZE in WINDOW_SIZES:
+        laser_dataset = LaserDataset(X_scaled, WINDOW_SIZE)
+        for HIDDEN_DIM in HIDDEN_DIMS:
             for LEARNING_RATE in LEARNING_RATES:
-                laser_dataset = LaserDataset(X_scaled, WINDOW_SIZE)
-
+                if RANDOM_SEED is not None:
+                    torch.manual_seed(RANDOM_SEED)
                 train_size = int(0.8 * len(laser_dataset))
                 train_data = Subset(laser_dataset, range(train_size))
                 val_data = Subset(laser_dataset, range(train_size, len(laser_dataset)))
@@ -103,33 +99,40 @@ for MODEL_CLASS in [RNN, LSTM]:
                     history["val_mse"].append(epoch_val_mse)
                     history["val_mae"].append(epoch_val_mae)
 
-                #Save MSE/MAE from the last epoch
-                final_train_mse = history["train_mse"][-1]
-                final_val_mse = history["val_mse"][-1]
-                final_val_mae = history["val_mae"][-1]
+                #Select the epoch with the lowest score
+                val_mse = np.array(history["val_mse"])
+                val_mae = np.array(history["val_mae"])
 
-                # Calculates a score where MSE weights twice as much than MAE to decide the best hyperparameter combo
-                score = round(final_val_mse + 0.5 * final_val_mae, 7)
+                # Calculates score for each epoch where MSE weights twice as much than MAE to decide the best hyperparameter combo
+                scores = val_mse + 0.5 * val_mae
+                best_epoch_id = int(np.argmin(scores)) #Retrieves the epoch with the lowest score
+
+                # Save MSE/MAE from the best epoch
+                final_train_mse = history["train_mse"][best_epoch_id]
+                final_val_mse = history["val_mse"][best_epoch_id]
+                final_val_mae = history["val_mae"][best_epoch_id]
+                final_score = round(float(scores[best_epoch_id]), 7) #Round score to 7 decimals
 
                 config = {
-                    "model": MODEL_CLASS.__name__,
                     "hidden_dim": HIDDEN_DIM,
                     "window_size": WINDOW_SIZE,
                     "learning_rate": LEARNING_RATE,
-                    "score": score,
-                    "train_mse": final_train_mse,
-                    "val_mse": final_val_mse,
-                    "val_mae": final_val_mae,
+                    "score": final_score,
+                    "train_mse": final_train_mse, #Stored for debugging
+                    "val_mse": final_val_mse, #Stored for debugging
+                    "val_mae": final_val_mae, #Stored for debugging
                 }
                 # Keep only the best model for RNN and LSTM based of score and update results
                 if MODEL_CLASS == RNN:
                     resultsRNN.append(config)
-                    if score < best_rnn_score:
-                        best_rnn_score = score
+                    if final_score < best_rnn_score:
+                        best_rnn_score = final_score
+                        best_rnn_history = history.copy()
                 else:
                     resultsLSTM.append(config)
-                    if score < best_lstm_score:
-                        best_lstm_score = score
+                    if final_score < best_lstm_score:
+                        best_lstm_score = final_score
+                        best_lstm_history = history.copy()
 
 #Order results by score
 resultsRNN = sorted(resultsRNN, key=lambda x: x["score"])
@@ -160,5 +163,13 @@ with open("results/best_rnn.json", "w") as f:
 
 with open("results/best_lstm.json", "w") as f:
     json.dump(resultsLSTM[0], f, indent=4)
+
+with open("results/best_rnn_history.json", "w") as f:
+    json.dump(best_rnn_history, f, indent=4)
+
+with open("results/best_lstm_history.json", "w") as f:
+    json.dump(best_lstm_history, f, indent=4)
+
+plot_history()
 
 

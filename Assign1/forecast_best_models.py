@@ -36,10 +36,10 @@ HIDDEN_DIM_LSTM = int(lstm_config["hidden_dim"])
 WINDOW_SIZE_LSTM = int(lstm_config["window_size"])
 LEARNING_RATE_LSTM = float(lstm_config["learning_rate"])
 
-def run_model(model, training_data, WINDOW_SIZE, LEARNING_RATE):
-    if RANDOM_SEED is not None:
-        torch.manual_seed(RANDOM_SEED)
+if RANDOM_SEED is not None:
+    torch.manual_seed(RANDOM_SEED)
 
+def run_model(model, training_data, WINDOW_SIZE, LEARNING_RATE):
     train_loader = DataLoader(training_data, batch_size=BATCH_SIZE, shuffle=True)
     criterion = nn.MSELoss()
     optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE)

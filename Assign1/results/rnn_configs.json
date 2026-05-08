@@ -1,126 +1,122 @@
 [
     {
-        "model": "RNN",
-        "hidden_dim": 32,
-        "window_size": 30,
-        "learning_rate": 0.001,
-        "score": 0.0059711,
-        "train_mse": 0.0019391,
-        "val_mse": 0.0001998,
-        "val_mae": 0.0115426
-    },
-    {
-        "model": "RNN",
-        "hidden_dim": 32,
-        "window_size": 20,
-        "learning_rate": 0.001,
-        "score": 0.0065079,
-        "train_mse": 0.0016853,
-        "val_mse": 0.0002462,
-        "val_mae": 0.0125234
-    },
-    {
-        "model": "RNN",
-        "hidden_dim": 32,
-        "window_size": 10,
-        "learning_rate": 0.001,
-        "score": 0.0074428,
-        "train_mse": 0.0023794,
-        "val_mse": 0.0003902,
-        "val_mae": 0.0141053
-    },
-    {
-        "model": "RNN",
-        "hidden_dim": 64,
-        "window_size": 10,
-        "learning_rate": 0.001,
-        "score": 0.0091274,
-        "train_mse": 0.0036947,
-        "val_mse": 0.0005279,
-        "val_mae": 0.017199
-    },
-    {
-        "model": "RNN",
         "hidden_dim": 64,
         "window_size": 30,
         "learning_rate": 0.001,
-        "score": 0.00916,
-        "train_mse": 0.0023121,
-        "val_mse": 0.0004101,
-        "val_mae": 0.0174999
+        "score": 0.0048258,
+        "train_mse": 0.0025838,
+        "val_mse": 0.0001258,
+        "val_mae": 0.0094001
     },
     {
-        "model": "RNN",
-        "hidden_dim": 64,
-        "window_size": 20,
-        "learning_rate": 0.001,
-        "score": 0.0099004,
-        "train_mse": 0.0019232,
-        "val_mse": 0.000527,
-        "val_mae": 0.0187467
-    },
-    {
-        "model": "RNN",
         "hidden_dim": 64,
         "window_size": 40,
         "learning_rate": 0.001,
-        "score": 0.0102062,
-        "train_mse": 0.0025646,
-        "val_mse": 0.0005523,
-        "val_mae": 0.0193077
+        "score": 0.0048776,
+        "train_mse": 0.0038323,
+        "val_mse": 0.0001519,
+        "val_mae": 0.0094514
     },
     {
-        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 20,
+        "learning_rate": 0.001,
+        "score": 0.005129,
+        "train_mse": 0.0026158,
+        "val_mse": 0.0001665,
+        "val_mae": 0.0099249
+    },
+    {
+        "hidden_dim": 32,
+        "window_size": 30,
+        "learning_rate": 0.001,
+        "score": 0.0054476,
+        "train_mse": 0.0038317,
+        "val_mse": 0.0001805,
+        "val_mae": 0.0105342
+    },
+    {
+        "hidden_dim": 64,
+        "window_size": 20,
+        "learning_rate": 0.001,
+        "score": 0.0056381,
+        "train_mse": 0.0024759,
+        "val_mse": 0.0001684,
+        "val_mae": 0.0109393
+    },
+    {
+        "hidden_dim": 64,
+        "window_size": 10,
+        "learning_rate": 0.001,
+        "score": 0.005678,
+        "train_mse": 0.0027817,
+        "val_mse": 0.0002138,
+        "val_mae": 0.0109284
+    },
+    {
         "hidden_dim": 32,
         "window_size": 40,
         "learning_rate": 0.001,
-        "score": 0.0107331,
-        "train_mse": 0.0035261,
-        "val_mse": 0.0006167,
-        "val_mae": 0.0202328
+        "score": 0.0068854,
+        "train_mse": 0.0026944,
+        "val_mse": 0.0002964,
+        "val_mae": 0.0131781
     },
     {
-        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 10,
+        "learning_rate": 0.001,
+        "score": 0.0068895,
+        "train_mse": 0.0030131,
+        "val_mse": 0.000281,
+        "val_mae": 0.013217
+    },
+    {
         "hidden_dim": 64,
         "window_size": 30,
         "learning_rate": 0.0001,
-        "score": 0.0188491,
-        "train_mse": 0.007171,
-        "val_mse": 0.0019678,
-        "val_mae": 0.0337627
+        "score": 0.0187698,
+        "train_mse": 0.0074719,
+        "val_mse": 0.0019159,
+        "val_mae": 0.0337077
     },
     {
-        "model": "RNN",
-        "hidden_dim": 64,
-        "window_size": 20,
-        "learning_rate": 0.0001,
-        "score": 0.0197655,
-        "train_mse": 0.0076716,
-        "val_mse": 0.0020419,
-        "val_mae": 0.0354473
-    },
-    {
-        "model": "RNN",
         "hidden_dim": 64,
         "window_size": 40,
         "learning_rate": 0.0001,
-        "score": 0.0225481,
-        "train_mse": 0.007625,
-        "val_mse": 0.002768,
-        "val_mae": 0.0395602
+        "score": 0.0195202,
+        "train_mse": 0.0075358,
+        "val_mse": 0.0020792,
+        "val_mae": 0.0348821
     },
     {
-        "model": "RNN",
+        "hidden_dim": 64,
+        "window_size": 20,
+        "learning_rate": 0.0001,
+        "score": 0.0196238,
+        "train_mse": 0.0076346,
+        "val_mse": 0.002078,
+        "val_mae": 0.0350916
+    },
+    {
         "hidden_dim": 64,
         "window_size": 10,
         "learning_rate": 0.0001,
-        "score": 0.0248854,
-        "train_mse": 0.0081754,
-        "val_mse": 0.003424,
-        "val_mae": 0.0429228
+        "score": 0.0259971,
+        "train_mse": 0.0086577,
+        "val_mse": 0.0037899,
+        "val_mae": 0.0444144
     },
     {
-        "model": "RNN",
+        "hidden_dim": 32,
+        "window_size": 20,
+        "learning_rate": 0.0001,
+        "score": 0.0313521,
+        "train_mse": 0.011061,
+        "val_mse": 0.0048627,
+        "val_mae": 0.0529788
+    },
+    {
         "hidden_dim": 32,
         "window_size": 10,
         "learning_rate": 0.0001,
@@ -130,33 +126,21 @@
         "val_mae": 0.0542987
     },
     {
-        "model": "RNN",
         "hidden_dim": 32,
         "window_size": 30,
         "learning_rate": 0.0001,
-        "score": 0.0326605,
-        "train_mse": 0.0114913,
-        "val_mse": 0.0048763,
-        "val_mae": 0.0555684
+        "score": 0.0322308,
+        "train_mse": 0.0115366,
+        "val_mse": 0.0050216,
+        "val_mae": 0.0544184
     },
     {
-        "model": "RNN",
-        "hidden_dim": 32,
-        "window_size": 20,
-        "learning_rate": 0.0001,
-        "score": 0.0333076,
-        "train_mse": 0.0113079,
-        "val_mse": 0.0054212,
-        "val_mae": 0.0557728
-    },
-    {
-        "model": "RNN",
         "hidden_dim": 32,
         "window_size": 40,
         "learning_rate": 0.0001,
-        "score": 0.0341385,
-        "train_mse": 0.0108051,
-        "val_mse": 0.0056071,
-        "val_mae": 0.0570628
+        "score": 0.0325894,
+        "train_mse": 0.011155,
+        "val_mse": 0.0053798,
+        "val_mae": 0.0544192
     }
 ]

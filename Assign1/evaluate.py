@@ -7,8 +7,8 @@ import os
 def evaluate(rnn_future, lstm_future):
     os.makedirs("plots", exist_ok=True)
     # load test data
-    mat = sio.loadmat("Xtrain.mat")
-    x_test = np.array(mat["Xtrain"]).flatten()[-200:]
+    mat = sio.loadmat("Xtest.mat")
+    x_test = np.array(mat["Xtest"]).flatten()[-200:]
 
     rnn_future = rnn_future.flatten()
     

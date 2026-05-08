@@ -1,162 +1,146 @@
 [
     {
-        "model": "LSTM",
-        "hidden_dim": 64,
-        "window_size": 10,
-        "learning_rate": 0.001,
-        "score": 0.0030493,
-        "train_mse": 0.0011147,
-        "val_mse": 6.87e-05,
-        "val_mae": 0.0059611
-    },
-    {
-        "model": "LSTM",
-        "hidden_dim": 32,
-        "window_size": 10,
-        "learning_rate": 0.001,
-        "score": 0.0043637,
-        "train_mse": 0.0016199,
-        "val_mse": 9.7e-05,
-        "val_mae": 0.0085334
-    },
-    {
-        "model": "LSTM",
-        "hidden_dim": 32,
-        "window_size": 20,
-        "learning_rate": 0.001,
-        "score": 0.0046362,
-        "train_mse": 0.0019173,
-        "val_mse": 0.0001512,
-        "val_mae": 0.00897
-    },
-    {
-        "model": "LSTM",
         "hidden_dim": 64,
         "window_size": 20,
         "learning_rate": 0.001,
-        "score": 0.0060508,
-        "train_mse": 0.0011151,
-        "val_mse": 0.0002135,
-        "val_mae": 0.0116745
+        "score": 0.0026271,
+        "train_mse": 0.0015988,
+        "val_mse": 3.86e-05,
+        "val_mae": 0.0051769
     },
     {
-        "model": "LSTM",
         "hidden_dim": 64,
         "window_size": 30,
         "learning_rate": 0.001,
-        "score": 0.0084322,
-        "train_mse": 0.0014421,
-        "val_mse": 0.0003948,
-        "val_mae": 0.0160747
+        "score": 0.002729,
+        "train_mse": 0.0018303,
+        "val_mse": 4.77e-05,
+        "val_mae": 0.0053626
     },
     {
-        "model": "LSTM",
-        "hidden_dim": 32,
-        "window_size": 30,
-        "learning_rate": 0.001,
-        "score": 0.0089139,
-        "train_mse": 0.001678,
-        "val_mse": 0.0003883,
-        "val_mae": 0.0170513
-    },
-    {
-        "model": "LSTM",
-        "hidden_dim": 32,
-        "window_size": 40,
-        "learning_rate": 0.001,
-        "score": 0.0096971,
-        "train_mse": 0.0017809,
-        "val_mse": 0.0005293,
-        "val_mae": 0.0183355
-    },
-    {
-        "model": "LSTM",
         "hidden_dim": 64,
-        "window_size": 40,
+        "window_size": 10,
         "learning_rate": 0.001,
-        "score": 0.010599,
-        "train_mse": 0.0012129,
-        "val_mse": 0.0005923,
-        "val_mae": 0.0200133
+        "score": 0.0027704,
+        "train_mse": 0.001384,
+        "val_mse": 5.2e-05,
+        "val_mae": 0.0054369
     },
     {
-        "model": "LSTM",
-        "hidden_dim": 64,
-        "window_size": 30,
-        "learning_rate": 0.0001,
-        "score": 0.0303259,
-        "train_mse": 0.0101526,
-        "val_mse": 0.0044346,
-        "val_mae": 0.0517826
-    },
-    {
-        "model": "LSTM",
         "hidden_dim": 32,
         "window_size": 20,
-        "learning_rate": 0.0001,
-        "score": 0.031602,
-        "train_mse": 0.0107126,
-        "val_mse": 0.0049166,
-        "val_mae": 0.0533709
+        "learning_rate": 0.001,
+        "score": 0.0030124,
+        "train_mse": 0.0016068,
+        "val_mse": 5.9e-05,
+        "val_mae": 0.0059068
     },
     {
-        "model": "LSTM",
-        "hidden_dim": 64,
-        "window_size": 40,
-        "learning_rate": 0.0001,
-        "score": 0.0325021,
-        "train_mse": 0.0106848,
-        "val_mse": 0.0050268,
-        "val_mae": 0.0549506
-    },
-    {
-        "model": "LSTM",
         "hidden_dim": 32,
         "window_size": 30,
-        "learning_rate": 0.0001,
-        "score": 0.0339537,
-        "train_mse": 0.0114534,
-        "val_mse": 0.0056279,
-        "val_mae": 0.0566516
+        "learning_rate": 0.001,
+        "score": 0.0031864,
+        "train_mse": 0.0015262,
+        "val_mse": 5.55e-05,
+        "val_mae": 0.0062619
     },
     {
-        "model": "LSTM",
         "hidden_dim": 64,
-        "window_size": 20,
-        "learning_rate": 0.0001,
-        "score": 0.0339785,
-        "train_mse": 0.0108854,
-        "val_mse": 0.0054127,
-        "val_mae": 0.0571315
+        "window_size": 40,
+        "learning_rate": 0.001,
+        "score": 0.0032944,
+        "train_mse": 0.0016843,
+        "val_mse": 7.77e-05,
+        "val_mae": 0.0064335
     },
     {
-        "model": "LSTM",
+        "hidden_dim": 32,
+        "window_size": 40,
+        "learning_rate": 0.001,
+        "score": 0.0033662,
+        "train_mse": 0.0015489,
+        "val_mse": 6.55e-05,
+        "val_mae": 0.0066013
+    },
+    {
         "hidden_dim": 32,
         "window_size": 10,
-        "learning_rate": 0.0001,
-        "score": 0.0344171,
-        "train_mse": 0.0109226,
-        "val_mse": 0.0055482,
-        "val_mae": 0.0577378
+        "learning_rate": 0.001,
+        "score": 0.0038058,
+        "train_mse": 0.0019176,
+        "val_mse": 9.12e-05,
+        "val_mae": 0.0074293
     },
     {
-        "model": "LSTM",
-        "hidden_dim": 32,
-        "window_size": 40,
-        "learning_rate": 0.0001,
-        "score": 0.0345632,
-        "train_mse": 0.0113266,
-        "val_mse": 0.0058131,
-        "val_mae": 0.0575003
-    },
-    {
-        "model": "LSTM",
         "hidden_dim": 64,
         "window_size": 10,
         "learning_rate": 0.0001,
-        "score": 0.0361629,
-        "train_mse": 0.0104904,
-        "val_mse": 0.0058357,
-        "val_mae": 0.0606545
+        "score": 0.0251639,
+        "train_mse": 0.0083052,
+        "val_mse": 0.0031097,
+        "val_mae": 0.0441084
+    },
+    {
+        "hidden_dim": 64,
+        "window_size": 20,
+        "learning_rate": 0.0001,
+        "score": 0.0292334,
+        "train_mse": 0.0104348,
+        "val_mse": 0.0042699,
+        "val_mae": 0.049927
+    },
+    {
+        "hidden_dim": 64,
+        "window_size": 30,
+        "learning_rate": 0.0001,
+        "score": 0.0299434,
+        "train_mse": 0.0097313,
+        "val_mse": 0.0043684,
+        "val_mae": 0.0511501
+    },
+    {
+        "hidden_dim": 64,
+        "window_size": 40,
+        "learning_rate": 0.0001,
+        "score": 0.0303847,
+        "train_mse": 0.0099034,
+        "val_mse": 0.0045931,
+        "val_mae": 0.0515832
+    },
+    {
+        "hidden_dim": 32,
+        "window_size": 10,
+        "learning_rate": 0.0001,
+        "score": 0.0333324,
+        "train_mse": 0.0100815,
+        "val_mse": 0.0050563,
+        "val_mae": 0.0565523
+    },
+    {
+        "hidden_dim": 32,
+        "window_size": 20,
+        "learning_rate": 0.0001,
+        "score": 0.0333586,
+        "train_mse": 0.0108233,
+        "val_mse": 0.0051973,
+        "val_mae": 0.0563226
+    },
+    {
+        "hidden_dim": 32,
+        "window_size": 30,
+        "learning_rate": 0.0001,
+        "score": 0.034048,
+        "train_mse": 0.0110821,
+        "val_mse": 0.0053106,
+        "val_mae": 0.0574748
+    },
+    {
+        "hidden_dim": 32,
+        "window_size": 40,
+        "learning_rate": 0.0001,
+        "score": 0.0344646,
+        "train_mse": 0.0111828,
+        "val_mse": 0.0055424,
+        "val_mae": 0.0578445
     }
 ]

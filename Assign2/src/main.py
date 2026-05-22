@@ -23,7 +23,7 @@ if __name__ == "__main__":
         type=ClassificationType,
         choices=list(ClassificationType),
         required=True,
-        help="The classification type to pre-process (Intra or Cross).",
+        help="The classification type to use (Intra or Cross).",
     )
     args = parser.parse_args()
     main(args.type)

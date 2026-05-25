@@ -65,14 +65,25 @@ y = torch.tensor(y, dtype=torch.long)
 dataset = TensorDataset(X, y)
 loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
-print(X.shape)
-print(y.shape)
-
 model = CNN(
     window_size=WINDOW_SIZE,
     conv_channels=[64, 128],
     kernel_sizes=[7, 5]
 )
-
+print(model)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+
+for epoch in range(NUMBER_EPOCHS):
+    running_loss = 0.0
+    for i, (batch_x, batch_y) in enumerate(loader):
+        outputs = model(batch_x)
+        loss = criterion(outputs, batch_y)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item()
+
+    print(f"Epoch [{epoch+1}/{NUMBER_EPOCHS}], Loss: {running_loss/len(loader):.10f}")

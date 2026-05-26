@@ -5,13 +5,16 @@ import torch
 from torch.utils.data import TensorDataset, DataLoader
 from CNN import CNN
 import torch.nn as nn
+from torch import tensor
+from torchmetrics.classification import Accuracy
 
 WINDOW_SIZE = 500
-STRIDE = 200
+STRIDE = 400
 NUMBER_EPOCHS = 10
 BATCH_SIZE = 32
 LEARNING_RATE = 1e-3
-FOLDER = Path("preprocessed_data/10/Intra/train")
+TRAIN_FOLDER = Path("preprocessed_data/10/Intra/train")
+TEST_FOLDER = Path("preprocessed_data/10/Intra/test")
 
 #Loads the actual data from 1 training file
 def load_single_data(filename_path):
@@ -21,7 +24,7 @@ def load_single_data(filename_path):
         return matrix
 
 #Iterates over all training files (Only Intra for now)
-def load_all_data():
+def load_all_data(FOLDER):
     files = list(FOLDER.glob("*.h5"))
     X_all = []
     y_all = []
@@ -58,27 +61,31 @@ def create_window(matrix):
         windows.append(window.astype(np.float32))
     return np.array(windows)
 
-X, y = load_all_data()
-X = torch.tensor(X, dtype=torch.float32)
-y = torch.tensor(y, dtype=torch.long)
+X_train, y_train = load_all_data(TRAIN_FOLDER)
+X_train = tensor(X_train, dtype=torch.float32)
+y_train = tensor(y_train, dtype=torch.long)
+train_dataset = TensorDataset(X_train, y_train)
+train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
-dataset = TensorDataset(X, y)
-loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
+X_test, y_test = load_all_data(TEST_FOLDER)
+X_test = tensor(X_test, dtype=torch.float32)
+y_test = tensor(y_test, dtype=torch.long)
+test_dataset = TensorDataset(X_test, y_test)
+test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
 
 model = CNN(
     window_size=WINDOW_SIZE,
-    conv_channels=[64, 128],
+    conv_channels=[32, 64],
     kernel_sizes=[7, 5]
 )
-print(model)
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
 for epoch in range(NUMBER_EPOCHS):
     running_loss = 0.0
-    for i, (batch_x, batch_y) in enumerate(loader):
-        outputs = model(batch_x)
-        loss = criterion(outputs, batch_y)
+    for i, (batch_x, batch_y) in enumerate(train_loader):
+        pred = model(batch_x)
+        loss = criterion(pred, batch_y)
 
         optimizer.zero_grad()
         loss.backward()
@@ -86,4 +93,15 @@ for epoch in range(NUMBER_EPOCHS):
 
         running_loss += loss.item()
 
-    print(f"Epoch [{epoch+1}/{NUMBER_EPOCHS}], Loss: {running_loss/len(loader):.10f}")
+    print(f"Epoch [{epoch+1}/{NUMBER_EPOCHS}], Loss: {running_loss/len(train_loader):.10f}")
+
+#Testing/Evaluation
+acc = Accuracy(task="multiclass",num_classes=4)
+model.eval()
+with torch.no_grad():
+    for batch_x, batch_y in test_loader:
+        _, preds = torch.max(model(batch_x), 1)
+        acc.update(preds, batch_y)
+
+test_acc = acc.compute()
+print(f"Test Accuracy: {test_acc}")

@@ -8,7 +8,7 @@ STRIDE = 400
 NUMBER_EPOCHS = 10
 BATCH_SIZE = 32
 LEARNING_RATE = 1e-3
-DOWNSAMPLE_RATE = 1
+DOWNSAMPLE_SIZES = [1, 50, 100]
 
 
 def main(classification_type: ClassificationType):
@@ -17,27 +17,35 @@ def main(classification_type: ClassificationType):
     else:
         splits = CROSS_SPLITS
 
-    print(f"Pre-processing {classification_type.value} data...")
-    for split in splits:
-        print(f"Pre-processing {split.value} split...")
-        pre_process_data(classification_type, split)
+    for downsample_size in DOWNSAMPLE_SIZES:
+        print(f"Running training/testing for downsample size: {downsample_size}")
 
-    training_split = splits[0]
-    testing_splits = splits[1:]
+        print(f"Pre-processing {classification_type.value} data...")
+        for split in splits:
+            print(f"Pre-processing {split.value} split...")
+            pre_process_data(downsample_size, classification_type, split)
 
-    training_data_dir = get_dir(
-        classification_type, training_split, downsample_size=DOWNSAMPLE_RATE
-    )
-    model = train_cnn(
-        WINDOW_SIZE, STRIDE, NUMBER_EPOCHS, BATCH_SIZE, LEARNING_RATE, training_data_dir
-    )
+        training_split = splits[0]
+        testing_splits = splits[1:]
 
-    for testing_split in testing_splits:
-        testing_data_dir = get_dir(
-            classification_type, testing_split, downsample_size=DOWNSAMPLE_RATE
+        training_data_dir = get_dir(
+            classification_type, training_split, downsample_size=downsample_size
         )
-        print(f"Testing on {testing_split.value} split...")
-        test_cnn(model, WINDOW_SIZE, STRIDE, BATCH_SIZE, testing_data_dir)
+        model = train_cnn(
+            WINDOW_SIZE,
+            STRIDE,
+            NUMBER_EPOCHS,
+            BATCH_SIZE,
+            LEARNING_RATE,
+            training_data_dir,
+        )
+
+        for testing_split in testing_splits:
+            testing_data_dir = get_dir(
+                classification_type, testing_split, downsample_size=downsample_size
+            )
+            print(f"Testing on {testing_split.value} split...")
+            test_cnn(model, WINDOW_SIZE, STRIDE, BATCH_SIZE, testing_data_dir)
 
 
 if __name__ == "__main__":

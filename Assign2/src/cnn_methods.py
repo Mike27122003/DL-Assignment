@@ -7,14 +7,16 @@ import torch.nn as nn
 from torch import tensor
 from torchmetrics.classification import Accuracy
 
-#Loads the actual data from 1 training file
+
+# Loads the actual data from 1 training file
 def load_single_data(filename_path):
     with h5.File(filename_path, "r") as f:
         key = list(f.keys())[0]
         matrix = f[key][()]
         return matrix
 
-#Iterates over all training files (Only Intra for now)
+
+# Iterates over all training files (Only Intra for now)
 def load_all_data(FOLDER, window_size, stride):
     files = list(FOLDER.glob("*.h5"))
     X_all = []
@@ -33,6 +35,7 @@ def load_all_data(FOLDER, window_size, stride):
     y = np.concatenate(y_all)
     return X, y
 
+
 def get_label(filename):
     if "rest" in filename:
         return 0
@@ -43,14 +46,16 @@ def get_label(filename):
     elif "task_working_memory" in filename:
         return 3
 
+
 def create_window(matrix, window_size, stride):
     windows = []
     T = matrix.shape[1]
 
     for start in range(0, T - window_size + 1, stride):
-        window = matrix[:, start:start + window_size]
+        window = matrix[:, start : start + window_size]
         windows.append(window.astype(np.float32))
     return np.array(windows)
+
 
 def train_cnn(window_size, stride, number_epochs, batch_size, learning_rate, folder):
     X_train, y_train = load_all_data(folder, window_size, stride)
@@ -59,11 +64,7 @@ def train_cnn(window_size, stride, number_epochs, batch_size, learning_rate, fol
     train_dataset = TensorDataset(X_train, y_train)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-    model = CNN(
-        window_size=window_size,
-        conv_channels=[32, 64],
-        kernel_sizes=[7, 5]
-    )
+    model = CNN(window_size=window_size, conv_channels=[32, 64], kernel_sizes=[7, 5])
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
@@ -79,9 +80,12 @@ def train_cnn(window_size, stride, number_epochs, batch_size, learning_rate, fol
 
             running_loss += loss.item()
 
-        print(f"Epoch [{epoch+1}/{number_epochs}], Loss: {running_loss/len(train_loader):.10f}")
+        print(
+            f"Epoch [{epoch+1}/{number_epochs}], Loss: {running_loss/len(train_loader):.10f}"
+        )
 
     return model
+
 
 def test_cnn(model, window_size, stride, batch_size, folder):
     X_test, y_test = load_all_data(folder, window_size, stride)
@@ -89,7 +93,7 @@ def test_cnn(model, window_size, stride, batch_size, folder):
     y_test = tensor(y_test, dtype=torch.long)
     test_dataset = TensorDataset(X_test, y_test)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-    acc = Accuracy(task="multiclass",num_classes=4)
+    acc = Accuracy(task="multiclass", num_classes=4)
     model.eval()
     with torch.no_grad():
         for batch_x, batch_y in test_loader:

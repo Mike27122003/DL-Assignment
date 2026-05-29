@@ -25,13 +25,17 @@ def main(classification_type: ClassificationType):
     training_split = splits[0]
     testing_splits = splits[1:]
 
-    training_data_dir = get_dir(classification_type, training_split)
+    training_data_dir = get_dir(
+        classification_type, training_split, downsample_size=DOWNSAMPLE_RATE
+    )
     model = train_cnn(
         WINDOW_SIZE, STRIDE, NUMBER_EPOCHS, BATCH_SIZE, LEARNING_RATE, training_data_dir
     )
 
     for testing_split in testing_splits:
-        testing_data_dir = get_dir(classification_type, testing_split)
+        testing_data_dir = get_dir(
+            classification_type, testing_split, downsample_size=DOWNSAMPLE_RATE
+        )
         print(f"Testing on {testing_split.value} split...")
         test_cnn(model, WINDOW_SIZE, STRIDE, BATCH_SIZE, testing_data_dir)
 

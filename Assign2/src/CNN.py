@@ -7,6 +7,7 @@ class CNN(nn.Module):
     def __init__(
         self,
         window_size,
+        dropout_rate,
         num_classes=4,
         conv_channels=[64, 128],
         kernel_sizes=[7, 5],
@@ -37,6 +38,7 @@ class CNN(nn.Module):
         flattened_size = in_channels * current_time
 
         self.fc1 = nn.Linear(flattened_size, 128)
+        self.dropout = nn.Dropout(p=dropout_rate)
         self.fc2 = nn.Linear(128, num_classes)
 
     def forward(self, x):

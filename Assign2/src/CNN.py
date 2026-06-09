@@ -9,8 +9,8 @@ class CNN(nn.Module):
         window_size,
         dropout_rate,
         num_classes=4,
-        conv_channels=[64, 128],
-        kernel_sizes=[7, 5],
+        conv_channels=[32, 64],
+        kernel_sizes=[5, 3],
     ):
         super().__init__()
         self.pool = nn.MaxPool1d(2)
@@ -45,5 +45,6 @@ class CNN(nn.Module):
         x = self.conv(x)
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
+        x = self.dropout(x)
         x = self.fc2(x)
         return x

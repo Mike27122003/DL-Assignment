@@ -4,11 +4,10 @@ from torch.utils.data import Dataset
 
 
 class WindowedDataset(Dataset):
-    def __init__(self, matrices, window_size, stride, labels, downsample_rate):
+    def __init__(self, matrices, window_size, stride, labels):
 
         self.matrices = [torch.tensor(m, dtype=torch.float32) for m in matrices]
-        self.window_size = max(window_size // downsample_rate, 1)
-        stride = max(stride // downsample_rate, 1)
+        self.window_size = window_size
         self.window_indices = self._generate_window_indices(stride, labels)
 
     def _generate_window_indices(self, stride, labels):

@@ -1,11 +1,12 @@
 import h5py as h5
 import numpy as np
 import torch
-from torch.utils.data import TensorDataset, DataLoader
+from torch.utils.data import DataLoader
 from CNN import CNN
 import torch.nn as nn
-from torch import tensor
 from torchmetrics.classification import Accuracy
+
+from utils.windowed_dataset import WindowedDataset
 
 
 # Loads the actual data from 1 training file
@@ -16,25 +17,21 @@ def load_single_data(filename_path):
         return matrix
 
 
-# Iterates over all training files (Only Intra for now)
-def load_all_data(FOLDER, window_size, stride):
+# Iterates over all training files
+def load_all_data(FOLDER):
     files = list(FOLDER.glob("*.h5"))
-    X_all = []
-    y_all = []
+    matrices = []
+    labels = []
 
     for file in files:
         filename = str(file)
         matrix = load_single_data(filename)
-        print(matrix.shape)
-        windows = create_window(matrix, window_size, stride)
         label = get_label(filename)
-        y = np.full(len(windows), label)
-        X_all.append(windows)
-        y_all.append(y)
 
-    X = np.concatenate(X_all)
-    y = np.concatenate(y_all)
-    return X, y
+        matrices.append(matrix)
+        labels.append(label)
+
+    return matrices, labels
 
 
 def get_label(filename):
@@ -61,17 +58,20 @@ def create_window(matrix, window_size, stride):
 def train_cnn(
     window_size,
     stride,
-    number_epochs,
+    total_updates,
     batch_size,
     learning_rate,
     weight_decay,
     dropout_rate,
     folder,
 ):
-    X_train, y_train = load_all_data(folder, window_size, stride)
-    X_train = tensor(X_train, dtype=torch.float32)
-    y_train = tensor(y_train, dtype=torch.long)
-    train_dataset = TensorDataset(X_train, y_train)
+    matrices_train, labels_train = load_all_data(folder)
+    matrices_train = [
+        matrix for matrix in matrices_train if matrix.shape[1] >= window_size
+    ]
+    if len(matrices_train) == 0:
+        return None
+    train_dataset = WindowedDataset(matrices_train, window_size, stride, labels_train)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
     model = CNN(
@@ -85,6 +85,7 @@ def train_cnn(
         model.parameters(), lr=learning_rate, weight_decay=weight_decay
     )
 
+    number_epochs = total_updates * batch_size // len(train_dataset) + 1
     for epoch in range(number_epochs):
         running_loss = 0.0
         for i, (batch_x, batch_y) in enumerate(train_loader):
@@ -105,10 +106,8 @@ def train_cnn(
 
 
 def test_cnn(model, window_size, stride, batch_size, folder):
-    X_test, y_test = load_all_data(folder, window_size, stride)
-    X_test = tensor(X_test, dtype=torch.float32)
-    y_test = tensor(y_test, dtype=torch.long)
-    test_dataset = TensorDataset(X_test, y_test)
+    matrices_test, labels_test = load_all_data(folder)
+    test_dataset = WindowedDataset(matrices_test, window_size, stride, labels_test)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     acc = Accuracy(task="multiclass", num_classes=4)
     model.eval()

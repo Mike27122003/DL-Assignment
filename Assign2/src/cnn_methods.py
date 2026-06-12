@@ -25,6 +25,7 @@ def load_all_data(FOLDER, window_size, stride):
     for file in files:
         filename = str(file)
         matrix = load_single_data(filename)
+        print(matrix.shape)
         windows = create_window(matrix, window_size, stride)
         label = get_label(filename)
         y = np.full(len(windows), label)
@@ -57,16 +58,32 @@ def create_window(matrix, window_size, stride):
     return np.array(windows)
 
 
-def train_cnn(window_size, stride, number_epochs, batch_size, learning_rate, weight_decay, dropout_rate, folder):
+def train_cnn(
+    window_size,
+    stride,
+    number_epochs,
+    batch_size,
+    learning_rate,
+    weight_decay,
+    dropout_rate,
+    folder,
+):
     X_train, y_train = load_all_data(folder, window_size, stride)
     X_train = tensor(X_train, dtype=torch.float32)
     y_train = tensor(y_train, dtype=torch.long)
     train_dataset = TensorDataset(X_train, y_train)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-    model = CNN(window_size=window_size, dropout_rate=dropout_rate, conv_channels=[32, 64], kernel_sizes=[5, 3])
+    model = CNN(
+        window_size=window_size,
+        dropout_rate=dropout_rate,
+        conv_channels=[32, 64],
+        kernel_sizes=[5, 3],
+    )
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+    optimizer = torch.optim.Adam(
+        model.parameters(), lr=learning_rate, weight_decay=weight_decay
+    )
 
     for epoch in range(number_epochs):
         running_loss = 0.0

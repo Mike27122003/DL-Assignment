@@ -2,14 +2,15 @@ import argparse
 from cnn_methods import train_cnn, test_cnn
 from utils.dirs import ClassificationType, INTRA_SPLITS, CROSS_SPLITS, get_dir
 from preprocess import pre_process_data
+import pandas as pd
 
 TOTAL_UPDATES = 2000
 BATCH_SIZE = 32
 LEARNING_RATE = 1e-3
-DOWNSAMPLE_SIZES = [10, 50, 100, 150]
+DOWNSAMPLE_SIZES = [10]
 results = []
 
-STRIDES = [20, 50, 100, 200, 300, 400, 500]
+STRIDES = [400]
 WINDOW_SIZES = [250, 500, 1000, 2000]
 WEIGHT_DECAYS = [0, 1e-4, 1e-5]
 DROPOUT_RATES = [0, 0.2, 0.5]
@@ -67,6 +68,15 @@ def main(classification_type: ClassificationType):
 
         # Stores the window size that provides the highest avg acc across the 3 tests
         results_sorted = sorted(window_results, key=lambda x: x[2], reverse=True)
+        table1 = pd.DataFrame([
+            {
+                "Window Size": r[0],
+                "Dropout Rate": BASE_DROPOUT_RATE,
+                "Weight Decay": BASE_WEIGHT_DECAY,
+                "Avg Acc": round(r[2], 4)
+            }
+            for r in results_sorted
+        ])
         best_window_size = results_sorted[0][0]
         best_stride = results_sorted[0][1]
 
@@ -100,7 +110,19 @@ def main(classification_type: ClassificationType):
 
     # Prints the accuracy and hyperparameter combo with the highest avg accuracy and the acc of each test
     results_sorted = sorted(total_results, key=lambda x: x["mean_acc"], reverse=True)
-    print(results_sorted[0])
+    table2 = pd.DataFrame([
+        {
+            "Window Size": r["window_size"],
+            "Dropout Rate": r["dropout"],
+            "Weight Decay": r["weight_decay"],
+            "Avg Acc": round(r["mean_acc"], 4)
+        }
+        for r in results_sorted
+        ])
+    print("Results tuning window size, fixed decay/dropout rate")
+    print(table1)
+    print("Results tuning weight decay/dropout rate, fixed window size")
+    print(table2)
 
 
 def train_test(

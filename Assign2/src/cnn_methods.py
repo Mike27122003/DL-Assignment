@@ -85,7 +85,7 @@ def train_cnn(
         model.parameters(), lr=learning_rate, weight_decay=weight_decay
     )
 
-    number_epochs = total_updates * batch_size // len(train_dataset) + 1
+    number_epochs = 10 #total_updates * batch_size // len(train_dataset) + 1
     for epoch in range(number_epochs):
         running_loss = 0.0
         for i, (batch_x, batch_y) in enumerate(train_loader):
